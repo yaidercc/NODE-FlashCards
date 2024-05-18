@@ -38,6 +38,26 @@ const userModel = Schema({
     type: String,
     required: true,
   },
+  status:{
+    type:Boolean,
+    default: true
+  }
 });
+
+userModel.methods.toJSON = function(){
+  const {
+    __v,
+    password,
+    _id,
+    status,
+    google,
+    ...user
+  } = this.toObject();
+
+  return {
+    id: _id,
+    ...user
+  }
+}
 
 module.exports = model("user", userModel);

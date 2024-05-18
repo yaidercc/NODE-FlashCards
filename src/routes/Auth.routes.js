@@ -2,6 +2,7 @@ const Routes = require("express").Router();
 const { check } = require("express-validator");
 const validateFields = require("../helpers/validarCampos");
 const authControllers = require("../controllers/Auth.controller");
+const isAuthenticated = require("../middlewares/isAuthenticated");
 
 Routes.post("/login", authControllers.login);
 
@@ -17,5 +18,6 @@ Routes.post(
   ],
   authControllers.signin
 );
+Routes.get("/logout", isAuthenticated, authControllers.logout);
 
 module.exports = Routes;
