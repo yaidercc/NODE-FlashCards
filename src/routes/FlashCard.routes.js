@@ -1,4 +1,7 @@
-const Routes = require("express").Router();
-const flashcardControllers = require("../controllers/FlashCard.controller")
+const router = require("express").Router();
+const flashcardControllers = require("../controllers/FlashCard.controller");
+const isAuthenticated = require("../middlewares/isAuthenticated");
 
-module.exports = Routes;
+// router.get("/getFlashcard/:id", isAuthenticated, flashcardControllers.getFlashcard)
+
+module.exports = router;

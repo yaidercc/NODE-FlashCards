@@ -24,12 +24,6 @@ router.get("/logout", isAuthenticated, authControllers.logout);
 router.get("/hola",isAuthenticated, (req, res, next) => {
   res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
-router.get("/chao",isAuthenticated, (req, res, next) => {
-  res.sendFile(path.join(__dirname, '../public', 'login.html'));
-});
-router.get("/login", (req, res, next) => {
-  res.sendFile(path.join(__dirname, '../public', 'login.html'));
-});
 
 
 module.exports = router;

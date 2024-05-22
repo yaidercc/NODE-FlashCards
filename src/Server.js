@@ -35,9 +35,9 @@ class Server {
           mongoUrl: process.env.MONGO_CNN_SESSION,
         }),
         cookie: {
-          maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+          maxAge: 1000 * 60 * 60 * 24,
         },
-        cookie: { secure: false }, // Remember to set this
+        cookie: { secure: false }
       })
     );
 
