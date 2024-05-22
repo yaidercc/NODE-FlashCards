@@ -1,9 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const dbConnection = require("./config/database");
-const passport = require("passport")
+const passport = require("passport");
 const session = require("express-session");
-const MongoStore = require('connect-mongo');
+const MongoStore = require("connect-mongo");
 class Server {
   constructor() {
     this.port = process.env.PORT;
@@ -24,27 +24,26 @@ class Server {
   }
 
   middlewares() {
-    this.app.use(cors());
+    this.app.use(cors({ origin: "http://localhost:4000", credentials: true }));
     this.app.use(express.json());
     this.app.use(
       session({
         secret: process.env.SECRET,
         resave: false,
         saveUninitialized: false,
-        store: MongoStore.create({ 
+        store: MongoStore.create({
           mongoUrl: process.env.MONGO_CNN_SESSION,
-          ttl: 24 * 60 * 60, // Especifica en cuanto tiempo se van a borrar el documento creado (24h)
         }),
         cookie: {
-          expires: new Date(Date.now() + 3600000), // Especifica hasta cuando es valida la sesioon del usuario (1h)
-          httpOnly: true, // indica al navegador que la cookie solo debe ser accesible a través del protocolo HTTP
-          path: '/', // Indica que la cookie va a esta disponible para todos los directorios de la pagina
+          maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
         },
+        cookie: { secure: false }, // Remember to set this
       })
     );
 
-    this.app.use(passport.initialize())
-    this.app.use(passport.session())
+    this.app.use(passport.initialize());
+    this.app.use(passport.session());
+    this.app.use(express.static("public"));
   }
 
   async conectarDB() {

@@ -1,8 +1,8 @@
-const isAuthenticated = (req, res, next) =>{
+const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
-    return next(); // Si el usuario está autenticado, permite continuar
+    return next();
   }
-  res.status(401).json({ message: "Unauthorized" }); // Si el usuario no está autenticado, devuelve un error 401
-}
+  res.status(401).json({ success: false, message: "No autorizado" }); 
+};
 
-module.exports = isAuthenticated
+module.exports = isAuthenticated;

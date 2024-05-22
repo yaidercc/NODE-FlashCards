@@ -1,8 +1,7 @@
 const auth = {};
 module.exports = auth;
-const bcryptjs = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const userModel = require("../models/User");
-
 const passportAuth = require("../config/passport");
 
 auth.signin = async (req, res) => {
@@ -27,8 +26,8 @@ auth.signin = async (req, res) => {
       ...otherInfo,
     });
 
-    const salt = bcryptjs.genSaltSync();
-    user.password = bcryptjs.hashSync(password, salt);
+    const salt = bcrypt.genSaltSync();
+    user.password = bcrypt.hashSync(password, salt);
 
     await user.save();
 
@@ -63,6 +62,7 @@ auth.login = (req, res, next) => {
 
       req.logIn(user, async (err) => {
         if (err) return next(err);
+        console.log(req.isAuthenticated())
         return res.json({
           success: true,
           msg: "Inicio de sesion exitoso.",

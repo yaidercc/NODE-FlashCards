@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="form-login">
+      <input type="text" id="inpt-username" />
+      <input type="password" id="inpt-pass" />
+      <button class="btn-id" type="submit">Send</button>
+    </form>
+    <script>
+      const form = document.querySelector("#form-login");
+      const username = document.querySelector("#inpt-username")
+      const pass = document.querySelector("#inpt-pass")
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const response = fetch("http://localhost:4000/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: "elDavid",
+            password: "david123"
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => console.log(data))
+          .catch((error) => console.error(error));
+      });
+    </script>
+  </body>
+</html>

@@ -15,18 +15,22 @@ passport.use(
   })
 );
 
-passport.serializeUser((id, done) => {
-  done(null, id);
+passport.serializeUser((userId, done) => {
+  done(null, userId);
 });
 
-passport.deserializeUser(async (id, done) => {
+passport.deserializeUser(async (userId, done) => {
   try {
-    const findUser = await User.findById(id);
-    const { password, status, google,...user } = findUser._doc;
-    done(null, user);
-  } catch (error) {
-    done(error);
-  }
-});
+    const findUser = await User.findById(userId);
+      if (!findUser) {
+        return done(null, false);
+      }
+      const { password, status, google, ...userInfo } = findUser.toObject();
+      done(null, userInfo);
+    } catch (error) {
+      done(error);
+    }
+  });
+  
 
 module.exports = passport;

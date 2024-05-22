@@ -1,12 +1,13 @@
-const Routes = require("express").Router();
+const router = require("express").Router();
 const { check } = require("express-validator");
 const validateFields = require("../helpers/validarCampos");
 const authControllers = require("../controllers/Auth.controller");
 const isAuthenticated = require("../middlewares/isAuthenticated");
+const path = require("path")
 
-Routes.post("/login", authControllers.login);
+router.post("/login", authControllers.login);
 
-Routes.post(
+router.post(
   "/singin",
   [
     check("first_name", "El nombre es obligatorio").not().isEmpty(),
@@ -18,6 +19,17 @@ Routes.post(
   ],
   authControllers.signin
 );
-Routes.get("/logout", isAuthenticated, authControllers.logout);
+router.get("/logout", isAuthenticated, authControllers.logout);
 
-module.exports = Routes;
+router.get("/hola",isAuthenticated, (req, res, next) => {
+  res.sendFile(path.join(__dirname, '../public', 'index.html'));
+});
+router.get("/chao",isAuthenticated, (req, res, next) => {
+  res.sendFile(path.join(__dirname, '../public', 'login.html'));
+});
+router.get("/login", (req, res, next) => {
+  res.sendFile(path.join(__dirname, '../public', 'login.html'));
+});
+
+
+module.exports = router;
