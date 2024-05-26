@@ -3,10 +3,126 @@ const { check } = require("express-validator");
 const validateFields = require("../helpers/validarCampos");
 const authControllers = require("../controllers/Auth.controller");
 const isAuthenticated = require("../middlewares/isAuthenticated");
-const path = require("path")
+const path = require("path");
 
-router.post("/login", authControllers.login);
 
+/**
+ * @openapi
+ * /api/auth/login:
+ *   post:
+ *     summary: Loguear usuario
+ *     description: Login con el usuario
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: El correo electrónico del usuario
+ *                 example: "user"
+ *               password:
+ *                 type: string
+ *                 description: La contraseña del usuario
+ *                 example: "password123"
+ *     responses:
+ *       200:
+ *         description: Usuario logueado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la respuesta
+ *                 msg:
+ *                   type: string
+ *                   description: Mensaje de la peticion
+ *       400:
+ *         description: Error al loguear usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la respuesta
+ *                 errors:
+ *                   type: object
+ *                   description: Errores de la peticion
+ */
+router.post(
+  "/login",
+  [
+    check("username", "El nombre de usuario es obligatorio").not().isEmpty(),
+    check("password", "La clave es obligatoria").not().isEmpty(),
+    validateFields,
+  ],
+  authControllers.login
+);
+
+/**
+ * @openapi
+ * /api/auth/singin:
+ *   post:
+ *     summary: Registrar usuario
+ *     description: Registro de usuarios
+ *     produces: 
+ *        - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *                first_name:
+ *                   required: true
+ *                   type: string
+ *                   description: El correo electrónico del usuario
+ *                   example: "juan"
+ *                second_name:
+ *                   required: true
+ *                   type: string
+ *                   description: El correo electrónico del usuario
+ *                   example: "andres"
+ *                surname:
+ *                   required: true
+ *                   type: string
+ *                   description: El correo electrónico del usuario
+ *                   example: "arboleda"
+ *                second_surname:
+ *                   required: true
+ *                   type: string
+ *                   description: El correo electrónico del usuario
+ *                   example: "perez"
+ *                username:
+ *                   required: true
+ *                   type: string
+ *                   description: El correo electrónico del usuario
+ *                   example: "elJuan"
+ *                profile_img:
+ *                   required: true
+ *                   type: string
+ *                   description: El correo electrónico del usuario
+ *                   example: "https://example.com/profile.jpg"
+ *                mail:
+ *                   required: true
+ *                   type: string
+ *                   description: El correo electrónico del usuario
+ *                   example: "juan@example.com"
+ *                password:
+ *                   required: true
+ *                   type: string
+ *                   description: El correo electrónico del usuario
+ *                   example: "juan123"
+ */
 router.post(
   "/singin",
   [
@@ -19,11 +135,42 @@ router.post(
   ],
   authControllers.signin
 );
-router.get("/logout", isAuthenticated, authControllers.logout);
 
-router.get("/hola",isAuthenticated, (req, res, next) => {
-  res.sendFile(path.join(__dirname, '../public', 'index.html'));
+/**
+ * @openapi
+ * /api/auth/logout:
+ *   get:
+ *     summary: Cerrar sesion de un usuario
+ *     description: Cierra la sesión del usuario
+ *     responses:
+ *       200:
+ *         description: Sesion cerrada con exito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la respuesta
+ *                 msg:
+ *                   type: string
+ *                   description: Mensaje de la peticion
+ *       500:
+ *         description: Error al cerrar sesion
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 msg:
+ *                   type: string
+ *                   description: Mensaje de error
+ */
+router.get("/logout", authControllers.logout);
+
+router.get("/hola", isAuthenticated, (req, res, next) => {
+  res.sendFile(path.join(__dirname, "../public", "index.html"));
 });
-
 
 module.exports = router;

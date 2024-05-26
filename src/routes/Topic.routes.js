@@ -4,6 +4,13 @@ const topicControllers = require("../controllers/Topic.controller");
 const validateFields = require("../helpers/validarCampos");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 
+/**
+ * @openapi
+ * /api/topic/{id}:
+ *   get:
+ *     summary: Obtener temario
+ *     description: Obtener un temario en especifico
+ */
 router.get(
   "/:id",
     [
@@ -14,8 +21,22 @@ router.get(
   topicControllers.getTopic
 );
 
+/**
+ * @openapi
+ * /api/topic/getTopics:
+ *   get:
+ *     summary: Obtener temarios
+ *     description: Obtener todos los temarios de un usuario
+ */
 router.get("/getTopics", isAuthenticated, topicControllers.getTopics);
 
+/**
+ * @openapi
+ * /api/topic/createTopic:
+ *   get:
+ *     summary: Crear temario
+ *     description: Crea un temario en especifico
+ */
 router.post(
     "/createTopic",
         [
@@ -26,6 +47,13 @@ router.post(
     topicControllers.createTopic
 );
 
+/**
+ * @openapi
+ * /api/topic/editTopic/{id}:
+ *   put:
+ *     summary: Editar temario
+ *     description: Edita un temario especifico
+ */
 router.put(
   "/editTopic/:id",
     [
@@ -38,6 +66,13 @@ router.put(
   topicControllers.editTopic
 );
 
+/**
+ * @openapi
+ * /api/topic/deleteTopic/{id}:
+ *   delete:
+ *     summary: Eliminar temario
+ *     description: Eliminar un temario especifico
+ */
 router.delete(
   "/deleteTopic/:id",
   [

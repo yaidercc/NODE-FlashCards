@@ -50,6 +50,8 @@ auth.signin = async (req, res) => {
   }
 };
 
+
+
 auth.login = (req, res, next) => {
   try {
     passportAuth.authenticate("login", (err, user, errors) => {
@@ -66,6 +68,7 @@ auth.login = (req, res, next) => {
           success: true,
           msg: "Inicio de sesion exitoso.",
         });
+        
       });
     })(req, res, next);
   } catch (error) {
@@ -79,8 +82,8 @@ auth.login = (req, res, next) => {
 auth.logout = (req, res) => {
   req.logout((err) => {
     if (err) {
-      return res.status(500).json({ message: "Error al cerrar sesión" });
+      return res.status(500).json({ msg: "Error al cerrar sesión" });
     }
-    return res.json({ message: "Sesión cerrada exitosamente" });
+    return res.json({ msg: "Sesión cerrada exitosamente" });
   });
 };

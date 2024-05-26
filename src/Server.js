@@ -4,6 +4,8 @@ const dbConnection = require("./config/database");
 const passport = require("passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+const { swaggerDocs: V1SwaggerDocs } = require("./config/swagger");
+
 class Server {
   constructor() {
     this.port = process.env.PORT;
@@ -21,6 +23,8 @@ class Server {
     this.middlewares();
 
     this.routes();
+
+    V1SwaggerDocs(this.app, this.port);
   }
 
   middlewares() {
@@ -37,7 +41,7 @@ class Server {
         cookie: {
           maxAge: 1000 * 60 * 60 * 24,
         },
-        cookie: { secure: false }
+        cookie: { secure: false },
       })
     );
 
@@ -60,6 +64,7 @@ class Server {
   listen() {
     this.app.listen(this.port, () => {
       console.log("Servidor corriendo en puerto", this.port);
+     
     });
   }
 }
