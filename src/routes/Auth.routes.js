@@ -12,6 +12,8 @@ const path = require("path");
  *   post:
  *     summary: Loguear usuario
  *     description: Login con el usuario
+ *     tags:
+ *       - Auth
  *     produces:
  *       - application/json
  *     requestBody:
@@ -73,6 +75,8 @@ router.post(
  *   post:
  *     summary: Registrar usuario
  *     description: Registro de usuarios
+ *     tags:
+ *       - Auth
  *     produces: 
  *        - application/json
  *     requestBody:
@@ -142,6 +146,8 @@ router.post(
  *   get:
  *     summary: Cerrar sesion de un usuario
  *     description: Cierra la sesión del usuario
+ *     tags: 
+ *       - Auth
  *     responses:
  *       200:
  *         description: Sesion cerrada con exito

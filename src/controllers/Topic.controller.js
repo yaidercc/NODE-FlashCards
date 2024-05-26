@@ -2,7 +2,7 @@ const topicController = {};
 module.exports = topicController;
 
 const Topic = require("../models/Topic");
-const FlashCard = require("../models/FlashCard")
+const FlashCard = require("../models/FlashCard");
 
 topicController.getTopic = async (req, res) => {
   try {
@@ -61,6 +61,13 @@ topicController.createTopic = async (req, res) => {
       return res.status(400).json({
         success: false,
         msg: "El temario ya existe.",
+      });
+    }
+
+    if (!name.trim()) {
+      return res.status(400).json({
+        success: false,
+        msg: "El nombre del temario esta vacio.",
       });
     }
 
@@ -149,7 +156,7 @@ topicController.deleteTopic = async (req, res) => {
     }
 
     await Topic.findByIdAndDelete(id);
-    await FlashCard.find({topic:id}).remove()
+    await FlashCard.find({ topic: id }).remove();
 
     return res.json({
       success: true,

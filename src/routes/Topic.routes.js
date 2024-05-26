@@ -10,6 +10,48 @@ const isAuthenticated = require("../middlewares/isAuthenticated");
  *   get:
  *     summary: Obtener temario
  *     description: Obtener un temario en especifico
+ *     tags:
+ *       - Temarios
+ *     responses:
+ *       200:
+ *          description:
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: Estado de la respuesta
+ *                  topic:
+ *                    type: object
+ *                    description: Temario consultado
+ *       400:
+ *          description:
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: Estado de la respuesta
+ *                  msg:
+ *                    type: string
+ *                    description: Mensaje de error
+ *       500:
+ *        description: 
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                success:
+ *                  type: boolean
+ *                  description: Estado de la peticion
+ *                error:
+ *                  type: object
+ *                  description: Errores del servidor
  */
 router.get(
   "/:id",
@@ -27,15 +69,90 @@ router.get(
  *   get:
  *     summary: Obtener temarios
  *     description: Obtener todos los temarios de un usuario
+ *     tags:
+ *        - Temarios
+ *     responses:
+ *      200:
+ *         description: 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la peticion
+ *                 topics:
+ *                   type: object
+ *                   description: Temarios consultados
+ *      500:
+ *         description: 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la peticion
+ *                 error:
+ *                   type: object
+ *                   description: Errores del servidor
+ * 
  */
 router.get("/getTopics", isAuthenticated, topicControllers.getTopics);
 
 /**
  * @openapi
  * /api/topic/createTopic:
- *   get:
+ *   post:
  *     summary: Crear temario
  *     description: Crea un temario en especifico
+ *     tags:
+ *       - Temarios
+ *     responses:
+ *       200:
+ *          description: 
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: Estado de la peticion
+ *                  msg:
+ *                    type: string
+ *                    description: Mensaje de la peticion
+ *                  topic:
+ *                    type: object
+ *                    description: Temario creado
+ *       400:
+ *          description: 
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: Estado de la peticion
+ *                  msg:
+ *                    type: string
+ *                    description: Mensaje de error
+ *       500:
+ *          description: 
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: Estado de la peticion
+ *                  msg:
+ *                    type: string
+ *                    description: Errores del servidor
  */
 router.post(
     "/createTopic",
@@ -53,6 +170,48 @@ router.post(
  *   put:
  *     summary: Editar temario
  *     description: Edita un temario especifico
+ *     tags:
+ *       - Temarios
+ *     responses:
+ *       200:
+ *          description: 
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: Estado de la peticion
+ *                  msg:
+ *                    type: string
+ *                    description: Mensaje de la peticion
+ *       400:
+ *          description: 
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: Estado de la peticion
+ *                  msg:
+ *                    type: string
+ *                    description: Mensaje de error
+ *       500:
+ *          description: 
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: Estado de la peticion
+ *                  msg:
+ *                    type: string
+ *                    description: Errores del servidor
  */
 router.put(
   "/editTopic/:id",
@@ -72,6 +231,48 @@ router.put(
  *   delete:
  *     summary: Eliminar temario
  *     description: Eliminar un temario especifico
+ *     tags:
+ *       - Temarios
+ *     responses:
+ *       200:
+ *          description: 
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: Estado de la peticion
+ *                  msg:
+ *                    type: string
+ *                    description: Mensaje de la peticion
+ *       400:
+ *          description: 
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: Estado de la peticion
+ *                  msg:
+ *                    type: string
+ *                    description: Mensaje de error
+ *       500:
+ *          description: 
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: Estado de la peticion
+ *                  msg:
+ *                    type: string
+ *                    description: Errores del servidor
  */
 router.delete(
   "/deleteTopic/:id",
