@@ -1,15 +1,15 @@
 const auth = {};
 module.exports = auth;
 const bcrypt = require("bcryptjs");
-const userModel = require("../models/User");
+const User = require("../models/User");
 const passportAuth = require("../config/passport");
 
 auth.signin = async (req, res) => {
   try {
     const { first_name, surname, username, mail, password, ...otherInfo } = req.body;
 
-    const findUserByUsername = await userModel.findOne({ username });
-    const findUserByEmail = await userModel.findOne({ mail });
+    const findUserByUsername = await User.findOne({ username });
+    const findUserByEmail = await User.findOne({ mail });
 
     if (findUserByUsername || findUserByEmail) {
       return res.status(400).json({
@@ -17,7 +17,7 @@ auth.signin = async (req, res) => {
         msg: "El usuario ya existe.",
       });
     }
-    const user = new userModel({
+    const user = new User({
       first_name,
       surname,
       username,

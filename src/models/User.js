@@ -37,10 +37,6 @@ const userModel = Schema({
   password: {
     type: String,
     required: true,
-  },
-  status:{
-    type:Boolean,
-    default: true
   }
 });
 

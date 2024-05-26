@@ -149,6 +149,7 @@ topicController.deleteTopic = async (req, res) => {
     }
 
     await Topic.findByIdAndDelete(id);
+    await FlashCard.find({topic:id}).remove()
 
     return res.json({
       success: true,
