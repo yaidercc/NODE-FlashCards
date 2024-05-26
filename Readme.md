@@ -2,6 +2,14 @@
 
 La API de este proyecto de flashcards te permite crear una cuenta, autenticarte, crear y administrar tus propios temarios y flashcards personalizadas. Puedes crear, actualizar y eliminar temarios y flashcards, y obtener información sobre tus propios temarios y flashcards. Todo esto te permite personalizar tus propias flashcards y temarios para estudiar o practicar cualquier cosa que necesites.
 
+## Instalar dependencias
+
+`npm install`
+
+## Iniciar aplicacion
+
+`npm run dev`
+
 ## Endpoints
 
 ### Autenticación
@@ -14,28 +22,26 @@ La API de este proyecto de flashcards te permite crear una cuenta, autenticarte,
 
 ### Flashcards
 
-- `GET` `/api/flashcards/flashcardsByTemario/:id` - Obtener flashcards por id de temario
-- `GET` `/api/flashcards/:id` - Obtener flashcards por id
-- `POST` `/api/flashcards/` - Crear flashcard
-- `PUT` `/api/flashcards/` - Actualizar flashcard
-- `DELETE` `/api/flashcards/:id` - Eliminar flashcard
+- `GET` `/api/flashcard/:topic` - Obtener flashcards por id de temario
+- `GET` `/api/flashcard/getFlashcard/:id` - Obtener flashcard por id
+- `POST` `/api/flashcard/createFlashcard/:topic` - Crear flashcard
+- `PUT` `/api/flashcard/editFlashcard/:topic/:id` - Editar flashcard
+- `DELETE` `/api/deleteFlashcard/:topic/:id` - Eliminar flashcard
 
-### Búsqueda
-
-- `GET` `/api/search/:coleccion/:termino` - Buscar un registro en cualquier colección
 
 ### Temarios
 
-- `GET` `/api/temarios/temariosByUser/:usuario` - Obtener temarios por id de usuario
-- `GET` `/api/temarios/:id` - Obtener temarios por id
-- `POST` `/api/temarios/` - Crear temario
-- `PUT` `/api/temarios/` - Actualizar temario
-- `DELETE` `/api/temarios/:id` - Eliminar temario
+- `GET` `/api/topic/getTopics` - Obtener temarios por id de usuario
+- `GET` `/api/topic/:id` - Obtener temario por id
+- `POST` `/api/topic/createTopic` - Crear temario
+- `PUT` `/api/topic/editTopic/:id` - Actualizar temario
+- `DELETE` `/api/topic/deleteTopic/:id` - Eliminar temario
 
 ### Usuarios
 
-- `GET` `/api/usuarios/:id_user` - Obtener usuario por id
-- `PUT` `/api/usuarios/:id` - Actualizar usuario
+- `GET` `/api/user/:id_user` - Obtener usuario por id
+- `PUT` `/api/user/:id` - Actualizar usuario
+- `DELETE` `/api/user/deleteUser/:id` - Actualizar usuario
 
 
 ## Tecnologías utilizadas
@@ -44,3 +50,5 @@ La API de este proyecto de flashcards te permite crear una cuenta, autenticarte,
 - MongoDB
 - Mongoose
 - JWT
+- Swagger
+- Passport
