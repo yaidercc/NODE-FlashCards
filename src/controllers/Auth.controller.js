@@ -62,7 +62,6 @@ auth.login = (req, res, next) => {
 
       req.logIn(user, async (err) => {
         if (err) return next(err);
-        console.log(req.isAuthenticated())
         return res.json({
           success: true,
           msg: "Inicio de sesion exitoso.",
