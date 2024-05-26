@@ -39,8 +39,8 @@ La API de este proyecto de flashcards te permite crear una cuenta, autenticarte,
 
 ### Usuarios
 
-- `GET` `/api/user/:id_user` - Obtener usuario por id
-- `PUT` `/api/user/:id` - Actualizar usuario
+- `GET` `/api/user/getUser/:id` - Obtener usuario por id
+- `PUT` `/api/user/editUser/:id` - Actualizar usuario
 - `DELETE` `/api/user/deleteUser/:id` - Actualizar usuario
 
 
