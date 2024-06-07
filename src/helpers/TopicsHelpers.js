@@ -6,6 +6,7 @@ const validateTopicOwner = async (user, idTopic) => {
   if (!findTopic) {
     return {
       success: false,
+      code: 404,
       msg: "El temario no existe.",
     };
   }
@@ -13,6 +14,7 @@ const validateTopicOwner = async (user, idTopic) => {
   if (findTopic.user.toString() != user.toString()) {
     return {
       success: false,
+      code: 403,
       msg: "No tienes acceso a este temario.",
     };
   }

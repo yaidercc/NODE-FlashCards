@@ -100,7 +100,7 @@ router.get(
  *                   description: Errores del servidor
  * 
  */
-router.get("/getTopics", isAuthenticated, topicControllers.getTopics);
+router.get("/", isAuthenticated, topicControllers.getTopics);
 
 /**
  * @openapi

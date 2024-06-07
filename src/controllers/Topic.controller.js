@@ -13,6 +13,7 @@ topicController.getTopic = async (req, res) => {
     if (!getTopic) {
       return res.status(400).json({
         success: false,
+        code:400 ,
         msg: "El temario no existe.",
       });
     }
@@ -22,9 +23,11 @@ topicController.getTopic = async (req, res) => {
       topic: getTopic,
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       success: false,
-      error,
+      code:500 ,
+      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
@@ -32,7 +35,6 @@ topicController.getTopic = async (req, res) => {
 topicController.getTopics = async (req, res) => {
   try {
     const { _id: user } = req.user;
-
     const Topics = await Topic.find({ user });
 
     return res.json({
@@ -40,9 +42,11 @@ topicController.getTopics = async (req, res) => {
       Topics,
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       success: false,
-      error,
+      code:500 ,
+      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
@@ -60,6 +64,7 @@ topicController.createTopic = async (req, res) => {
     if (getTopic) {
       return res.status(400).json({
         success: false,
+        code:400 ,
         msg: "El temario ya existe.",
       });
     }
@@ -67,6 +72,7 @@ topicController.createTopic = async (req, res) => {
     if (!name.trim()) {
       return res.status(400).json({
         success: false,
+        code:400 ,
         msg: "El nombre del temario esta vacio.",
       });
     }
@@ -85,9 +91,11 @@ topicController.createTopic = async (req, res) => {
       topic,
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       success: false,
-      error,
+      code:500 ,
+      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
@@ -102,6 +110,7 @@ topicController.editTopic = async (req, res) => {
     if (!findTopic) {
       return res.status(400).json({
         succes: false,
+        code:400 ,
         msg: "El temario no existe",
       });
     }
@@ -109,6 +118,7 @@ topicController.editTopic = async (req, res) => {
     if (findTopic.user.toString() != userId.toString()) {
       return res.status(400).json({
         success: false,
+        code:400 ,
         msg: "El usuario no es el propietario del temario.",
       });
     }
@@ -118,6 +128,7 @@ topicController.editTopic = async (req, res) => {
     if (!response) {
       return res.status(400).json({
         success: false,
+        code:400 ,
         msg: "No tienes acceso al temario.",
       });
     }
@@ -127,9 +138,11 @@ topicController.editTopic = async (req, res) => {
       msg: "Temario editado con exito.",
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       success: false,
-      error,
+      code:500 ,
+      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
@@ -144,6 +157,7 @@ topicController.deleteTopic = async (req, res) => {
     if (!findTopic) {
       return res.status(400).json({
         success: false,
+        code:400 ,
         msg: "No se encontro el temario.",
       });
     }
@@ -151,6 +165,7 @@ topicController.deleteTopic = async (req, res) => {
     if (findTopic.user.toString() != user.toString()) {
       return res.status(400).json({
         success: false,
+        code:400 ,
         msg: "No tienes acceso a este temario",
       });
     }
@@ -163,9 +178,11 @@ topicController.deleteTopic = async (req, res) => {
       msg: "temario eliminado con exito.",
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       success: false,
-      error,
+      code:500 ,
+      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };

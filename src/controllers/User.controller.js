@@ -10,6 +10,7 @@ userControllers.getUser = async (req, res) => {
     if (id !== user.toString()) {
       return res.status(400).json({
         success: false,
+        code: 400,
         msg: "No autorizado.",
       });
     }
@@ -18,27 +19,31 @@ userControllers.getUser = async (req, res) => {
 
     const { google, password, __v, status, ...otherInfo } = userinfo._doc;
 
+
     return res.json({
       success: true,
       user: otherInfo,
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       success: false,
-      error,
+      code: 500,
+      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
 
 userControllers.editUser = async (req, res) => {
   try {
-    const { first_name, surname, username, mail, password = "", google = "", ...otherInfo } = req.body;
+    const { name, surname, username, mail, password = "", google = "", ...otherInfo } = req.body;
     const { _id: user } = req.user;
     const { id } = req.params;
 
     if (id !== user.toString()) {
       return res.status(400).json({
         success: false,
+        code: 400,
         msg: "No autorizado.",
       });
     }
@@ -50,6 +55,7 @@ userControllers.editUser = async (req, res) => {
       if (findByUsername) {
         return res.status(400).json({
           success: false,
+          code: 400,
           msg: "El nombre de usuario ya esta en uso.",
         });
       }
@@ -61,6 +67,7 @@ userControllers.editUser = async (req, res) => {
       if (findByMail) {
         return res.status(400).json({
           success: false,
+          code: 400,
           msg: "El correo ya esta en uso.",
         });
       }
@@ -69,7 +76,7 @@ userControllers.editUser = async (req, res) => {
     const { second_surname = null, second_name = null, profile_img = null } = otherInfo;
 
     const isEmpty = [
-      !first_name.trim(),
+      !name.trim(),
       !surname.trim(),
       !username.trim(),
       !mail.trim(),
@@ -81,12 +88,13 @@ userControllers.editUser = async (req, res) => {
     if (isEmpty.some((field) => field)) {
       return res.status(400).json({
         success: false,
+        code: 400,
         msg: "Algunos de los campos estan vacios o son incorrectos.",
       });
     }
 
     await User.findByIdAndUpdate(id, {
-      first_name,
+      name,
       surname,
       username,
       mail,
@@ -98,9 +106,11 @@ userControllers.editUser = async (req, res) => {
       msg: "Usuario editado con exito.",
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       success: false,
-      error,
+      code: 500,
+      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
@@ -113,6 +123,7 @@ userControllers.deleteUser = async (req, res) => {
     if (id !== user.toString()) {
       return res.status(400).json({
         success: false,
+        code: 400,
         msg: "No autorizado.",
       });
     }
@@ -121,7 +132,7 @@ userControllers.deleteUser = async (req, res) => {
 
     req.logout((err) => {
       if (err) {
-        return res.status(500).json({ message: "Error al cerrar sesión" });
+        return res.status(500).json({success:false,code:500, msg: "Error al cerrar sesión" });
       }
       return res.json({
         success: true,
@@ -129,9 +140,11 @@ userControllers.deleteUser = async (req, res) => {
       });
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       success: false,
-      error,
+      code: 500,
+      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };

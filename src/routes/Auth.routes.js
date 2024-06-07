@@ -4,7 +4,7 @@ const validateFields = require("../helpers/validarCampos");
 const authControllers = require("../controllers/Auth.controller");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const path = require("path");
-const validateJWT = require("../helpers/validateJWT")
+const validateJWT = require("../helpers/validateJWT");
 
 /**
  * @openapi
@@ -77,7 +77,7 @@ router.post(
  *     description: Registro de usuarios
  *     tags:
  *       - Auth
- *     produces: 
+ *     produces:
  *        - application/json
  *     requestBody:
  *       required: true
@@ -86,7 +86,7 @@ router.post(
  *           schema:
  *             type: object
  *             properties:
- *                first_name:
+ *                name:
  *                   required: true
  *                   type: string
  *                   description: El correo electrónico del usuario
@@ -130,7 +130,7 @@ router.post(
 router.post(
   "/singin",
   [
-    check("first_name", "El nombre es obligatorio").not().isEmpty(),
+    check("name", "El nombre es obligatorio").not().isEmpty(),
     check("surname", "El nombre es obligatorio").not().isEmpty(),
     check("username", "El nombre de usuario es obligatorio").not().isEmpty(),
     check("mail", "El correo es obligatorio").not().isEmpty(),
@@ -146,7 +146,7 @@ router.post(
  *   get:
  *     summary: Cerrar sesion de un usuario
  *     description: Cierra la sesión del usuario
- *     tags: 
+ *     tags:
  *       - Auth
  *     responses:
  *       200:
@@ -173,8 +173,7 @@ router.post(
  *                   type: string
  *                   description: Mensaje de error
  */
-router.get("/logout", authControllers.logout);
-
+router.post("/logout", authControllers.logout);
 
 /**
  * @openapi
@@ -182,7 +181,7 @@ router.get("/logout", authControllers.logout);
  *   get:
  *     summary: Envia correo al usuario para cambio de clave
  *     description: Envia la url al usuario para que este pueda cambiar su clave
- *     tags: 
+ *     tags:
  *       - Auth
  *     responses:
  *       200:
@@ -222,12 +221,11 @@ router.get("/logout", authControllers.logout);
  *                   type: string
  *                   description: Mensaje de error
  */
-router.post("/sendEmailToResetPassword",
-[
-  check("mail","El correo es incorrecto o esta vacio"),
-  validateFields
-],authControllers.sendEmailToResetPassword)
-
+router.post(
+  "/sendEmailToResetPassword",
+  [check("mail", "El correo es incorrecto o esta vacio"), validateFields],
+  authControllers.sendEmailToResetPassword
+);
 
 /**
  * @openapi
@@ -235,7 +233,7 @@ router.post("/sendEmailToResetPassword",
  *   get:
  *     summary: Cambiar la contraseña de un usuario
  *     description: Cambiar la contraseña de un usuario por una nueva
- *     tags: 
+ *     tags:
  *       - Auth
  *     responses:
  *       200:
@@ -263,7 +261,7 @@ router.post("/sendEmailToResetPassword",
  *                   description: Estado de la respuesta
  *                 msg:
  *                   type: string
- *                   description: Errores de la peticion
+ *                   description: Errores de la petici
  *       500:
  *         description: Error al cambiar la contraseña
  *         content:
@@ -275,8 +273,14 @@ router.post("/sendEmailToResetPassword",
  *                   type: string
  *                   description: Mensaje de error
  */
-router.post("/resetPassword", validateJWT ,authControllers.resetPassword)
+router.post("/resetPassword", validateJWT, authControllers.resetPassword);
 
+router.get("/isAuthenticated", isAuthenticated, (req, res) => {
 
+  return res.json({
+    success: true,
+    user: req.user,
+  });
+});
 
 module.exports = router;

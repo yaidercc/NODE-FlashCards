@@ -28,7 +28,10 @@ class Server {
   }
 
   middlewares() {
-    this.app.use(cors({ origin: "http://localhost:4000", credentials: true }));
+    this.app.use(cors({
+      origin: 'http://localhost:5173',
+  credentials: true
+    }));
     this.app.use(express.json());
     this.app.use(
       session({
@@ -40,8 +43,9 @@ class Server {
         }),
         cookie: {
           maxAge: 1000 * 60 * 60 * 24,
+          secure: false,
+          httpOnly: true,
         },
-        cookie: { secure: false },
       })
     );
 

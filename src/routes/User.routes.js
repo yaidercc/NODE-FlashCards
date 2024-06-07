@@ -123,7 +123,7 @@ router.put("/editUser/:id", [
     isAuthenticated,
     check("id", "El id del usuario es obligatorio o esta vacio").not().isEmpty(),
     validateFields,
-    check("first_name", "El nombre es obligatorio").not().isEmpty(),
+    check("name", "El nombre es obligatorio").not().isEmpty(),
     check("surname", "El nombre es obligatorio").not().isEmpty(),
     check("username", "El nombre de usuario es obligatorio").not().isEmpty(),
     check("mail", "El correo es obligatorio").not().isEmpty(),
