@@ -7,6 +7,7 @@ passport.use(
   "login",
   new LocalStrategy(async function (username, password, done) {
     const findUser = await User.findOne({ username });
+   
     const msg = "El usuario o la clave son invalidos.";
     if (!findUser) return done(null, false, { msg });
     const validatePassword = bcrypt.compareSync(password, findUser.password);

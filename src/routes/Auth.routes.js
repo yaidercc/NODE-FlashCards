@@ -128,16 +128,16 @@ router.post(
  *                   example: "juan123"
  */
 router.post(
-  "/singin",
+  "/singup",
   [
     check("name", "El nombre es obligatorio").not().isEmpty(),
-    check("surname", "El nombre es obligatorio").not().isEmpty(),
+    check("surname", "El apellido es obligatorio").not().isEmpty(),
     check("username", "El nombre de usuario es obligatorio").not().isEmpty(),
     check("mail", "El correo es obligatorio").not().isEmpty(),
-    check("password", "La clave es obligatoria").not().isEmpty(),
+    check("password", "La clave es obligatoria").isStrongPassword(),
     validateFields,
   ],
-  authControllers.signin
+  authControllers.singup
 );
 
 /**
@@ -173,7 +173,7 @@ router.post(
  *                   type: string
  *                   description: Mensaje de error
  */
-router.post("/logout", authControllers.logout);
+router.get("/logout", authControllers.logout);
 
 /**
  * @openapi

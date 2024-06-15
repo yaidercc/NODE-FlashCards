@@ -7,7 +7,7 @@ const passportAuth = require("../config/passport");
 const sendEmail = require("../config/resend");
 const generateJWT = require("../helpers/generateJWT");
 
-authControllers.signin = async (req, res) => {
+authControllers.singup = async (req, res) => {
   try {
     const { name, surname, username, mail, password, ...otherInfo } = req.body;
 
@@ -38,13 +38,6 @@ authControllers.signin = async (req, res) => {
     return res.json({
       success: true,
       msg: "Registro exitoso.",
-      user: {
-        name,
-        surname,
-        username,
-        mail,
-        ...otherInfo,
-      },
     });
   } catch (error) {
     console.log(error)
@@ -87,12 +80,26 @@ authControllers.login = (req, res, next) => {
   }
 };
 
-authControllers.logout = (req, res, next)=>{
-  req.logout(function(err) {
-    if (err) { return next(err); }
-    res.redirect('/');
+authControllers.logout = (req, res, next) => {
+  req.logout(err => {
+    if (err) {
+      return next(err);
+    }
+    
+    req.session.destroy(err => {
+      if (err) {
+        return res.status(500).json({ msg: "Error destroying session" });
+      }
+      res.clearCookie('connect.sid');
+      
+      return res.status(200).json({
+        success: true,
+        msg: "Logged out successfully"
+      });
+    });
   });
 };
+
 
 authControllers.sendEmailToResetPassword = async (req, res) => {
   try {
