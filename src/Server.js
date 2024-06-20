@@ -3,7 +3,7 @@ const cors = require("cors");
 const dbConnection = require("./config/database");
 const passport = require("passport");
 const session = require("express-session");
-const fileUpload = require("express-fileupload")
+const fileUpload = require("express-fileupload");
 const MongoStore = require("connect-mongo");
 const { swaggerDocs: V1SwaggerDocs } = require("./config/swagger");
 
@@ -29,11 +29,14 @@ class Server {
   }
 
   middlewares() {
-    this.app.use(cors({
-      origin: process.env.ORIGINCORS,
-      credentials: true
-    }));
+    this.app.use(
+      cors({
+        origin: process.env.ORIGINCORS,
+        credentials: true,
+      })
+    );
     this.app.use(express.json());
+
     this.app.use(
       session({
         secret: process.env.SECRET,
@@ -44,21 +47,24 @@ class Server {
         }),
         cookie: {
           maxAge: 1000 * 60 * 60 * 12,
-          secure: true,
+          secure: true, 
           httpOnly: true,
-          sameSite: 'none'
+          sameSite: "none",
         },
+        proxy: true, 
       })
     );
 
     this.app.use(passport.initialize());
     this.app.use(passport.session());
     this.app.use(express.static("public"));
-    this.app.use(fileUpload({
-      useTempFiles: true,
-      tempFileDir: "/tmp/",
-      createParentPath: true
-    }))
+    this.app.use(
+      fileUpload({
+        useTempFiles: true,
+        tempFileDir: "/tmp/",
+        createParentPath: true,
+      })
+    );
   }
 
   async conectarDB() {
@@ -75,7 +81,6 @@ class Server {
   listen() {
     this.app.listen(this.port, () => {
       console.log("Servidor corriendo en el puerto", this.port);
-     
     });
   }
 }
