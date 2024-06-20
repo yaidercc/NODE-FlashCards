@@ -14,11 +14,19 @@ authControllers.singup = async (req, res) => {
     const findUserByUsername = await User.findOne({ username });
     const findUserByEmail = await User.findOne({ mail });
 
-    if (findUserByUsername || findUserByEmail) {
+    if (findUserByUsername) {
       return res.status(409).json({
         success: false,
         code:409,
-        msg: "El usuario ya existe.",
+        msg: "El nombre de usuario ya existe.",
+      });
+    }
+
+    if ( findUserByEmail) {
+      return res.status(409).json({
+        success: false,
+        code:409,
+        msg: "El correo ya existe.",
       });
     }
     const user = new User({
@@ -27,6 +35,7 @@ authControllers.singup = async (req, res) => {
       username,
       mail,
       password,
+      profile_img: `https://ui-avatars.com/api/?name=${name}+${surname}&background=random&color=fff`,
       ...otherInfo,
     });
 
@@ -122,7 +131,7 @@ authControllers.sendEmailToResetPassword = async (req, res) => {
       `
       <h1>Recuperar contraseña</h1>
       <p>Puedes usar ese link para recuprar tu contraseña: 
-      <a href="http://localhost:4000/api/${token}">Click aqui</a>
+      <a href="https://react-flashcards-gules.vercel.app/changePassword/${token}">Click aqui</a>
       </p>
       `,
       mail

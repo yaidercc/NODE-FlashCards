@@ -5,7 +5,7 @@ const User = require("../models/User");
 const validarJWT = async (req, res, next) => {
     const token = req.header("x-token");
     if (!token) {
-        res.json({
+       return res.json({
             ok: false,
             msg: "No hay token en la peticion."
         })
@@ -19,7 +19,6 @@ const validarJWT = async (req, res, next) => {
 
         // Buscar usuario
         const user = await User.findById(id)
-        console.log(user)
 
         // Validar existencia del usuario
         if (!user) {
@@ -28,7 +27,6 @@ const validarJWT = async (req, res, next) => {
                 msg: "Usuario no existe"
             });
         }
-
         req.userInfo = user
         next()
     } catch (error) {

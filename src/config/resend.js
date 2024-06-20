@@ -6,8 +6,8 @@ const sedMails = (asunto, contenido, html, email) => {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "ycordobacc@gmail.com",
-        pass: "wyrvrutjucetzhse",
+        user: process.env.EMAILOWNER,
+        pass: process.env.PASSWORDOWNER,
       },
     });
 

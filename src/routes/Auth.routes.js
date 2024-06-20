@@ -275,8 +275,47 @@ router.post(
  */
 router.post("/resetPassword", validateJWT, authControllers.resetPassword);
 
-router.get("/isAuthenticated", isAuthenticated, (req, res) => {
 
+/**
+ * @openapi
+ * /api/auth/validateToken:
+ *   get:
+ *     summary: Validar token jwt
+ *     description: Validar si el token para cambiar la contraseña aun esta vigente
+ *     tags:
+ *       - Auth
+ *     responses:
+ *       200:
+ *         description: Token vigente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la respuesta
+ *       401:
+ *         description: Token no valido o el usuario no existe
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la respuesta
+ *                 msg:
+ *                   type: string
+ *                   description: Errores de la peticion
+ */
+router.get("/validateToken", validateJWT, (req, res) => {
+  return res.json({
+    success: true,
+  });
+});
+
+router.get("/isAuthenticated", isAuthenticated, (req, res) => {
   return res.json({
     success: true,
     user: req.user,

@@ -124,8 +124,8 @@ router.put("/editUser/:id", [
     check("id", "El id del usuario es obligatorio o esta vacio").not().isEmpty(),
     validateFields,
     check("name", "El nombre es obligatorio").not().isEmpty(),
-    check("surname", "El nombre es obligatorio").not().isEmpty(),
-    check("username", "El nombre de usuario es obligatorio").not().isEmpty(),
+    check("surname", "El apellido es obligatorio").not().isEmpty(),
+    check("username", "El username de usuario es obligatorio").not().isEmpty(),
     check("mail", "El correo es obligatorio").not().isEmpty(),
     validateFields,
 ], userControllers.editUser)
@@ -194,5 +194,7 @@ router.delete("/deleteUser/:id", [
     check("id", "El id es obligatorio o esta vacio").not().isEmpty(),
     validateFields,
 ], userControllers.deleteUser)
+
+router.put("/changeProfile",userControllers.uploadImage)
 
 module.exports = router;

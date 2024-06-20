@@ -1,6 +1,8 @@
 const userControllers = {};
 module.exports = userControllers;
 const User = require("../models/User");
+const cloudinary = require("cloudinary").v2;
+cloudinary.config(process.env.CLOUDINARY_URL);
 
 userControllers.getUser = async (req, res) => {
   try {
@@ -19,17 +21,16 @@ userControllers.getUser = async (req, res) => {
 
     const { google, password, __v, status, ...otherInfo } = userinfo._doc;
 
-
     return res.json({
       success: true,
       user: otherInfo,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({
       success: false,
       code: 500,
-      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
+      msg: "Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
@@ -44,7 +45,7 @@ userControllers.editUser = async (req, res) => {
       return res.status(400).json({
         success: false,
         code: 400,
-        msg: "No autorizado.",
+        msg: "No estas autorizado para realizar esta accion.",
       });
     }
 
@@ -106,11 +107,11 @@ userControllers.editUser = async (req, res) => {
       msg: "Usuario editado con exito.",
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({
       success: false,
       code: 500,
-      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
+      msg: "Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
@@ -132,19 +133,50 @@ userControllers.deleteUser = async (req, res) => {
 
     req.logout((err) => {
       if (err) {
-        return res.status(500).json({success:false,code:500, msg: "Error al cerrar sesión" });
+        return res.status(500).json({ success: false, code: 500, msg: "Error al cerrar sesión" });
       }
       return res.json({
         success: true,
-        msg: "Usuario eliminado con exito."
+        msg: "Usuario eliminado con exito.",
       });
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({
       success: false,
       code: 500,
-      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
+      msg: "Error en el servidor. Por favor, intenta de nuevo más tarde",
+    });
+  }
+};
+
+userControllers.uploadImage = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const user = await User.findById(_id)
+
+    if (user.profile_img) {
+      const nombreArr = user.profile_img.split("/");
+      const nombre = nombreArr[nombreArr.length - 1];
+      const [public_id] = nombre.split(".");
+      cloudinary.uploader.destroy(public_id);
+    }
+    const { tempFilePath } = req.files.file;
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+    user.profile_img = secure_url;
+
+    await user.save();
+
+    return res.json({
+      success: true,
+      profile_img: secure_url
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      code: 500,
+      msg: "Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
