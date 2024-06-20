@@ -46,7 +46,7 @@ class Server {
           maxAge: 1000 * 60 * 60 * 12,
           secure: true,
           httpOnly: true,
-          sameSite: 'strict'
+          sameSite: 'none'
         },
       })
     );
