@@ -45,7 +45,7 @@ class Server {
         cookie: {
           maxAge: 1000 * 60 * 60 * 12,
           secure: true,
-          httpOnly: true,
+          httpOnly: false,
           sameSite: 'none'
         },
       })
