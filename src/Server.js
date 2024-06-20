@@ -29,9 +29,14 @@ class Server {
   }
 
   middlewares() {
+    const origincors= 
+      process.env.NODE_ENV === 'production' 
+      ? 'https://flashcards-tau-six.vercel.app'
+      : 'http://localhost:5173';
+
     this.app.use(
       cors({
-        origin: process.env.ORIGINCORS,
+        origin: origincors,
         credentials: true,
       })
     );
