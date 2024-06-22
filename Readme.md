@@ -2,9 +2,16 @@
 
 La API de este proyecto de flashcards te permite crear una cuenta, autenticarte, crear y administrar tus propios temarios y flashcards personalizadas. Puedes crear, actualizar y eliminar temarios y flashcards, y obtener información sobre tus propios temarios y flashcards. Todo esto te permite personalizar tus propias flashcards y temarios para estudiar o practicar cualquier cosa que necesites.
 
-## Imagen Docker
+## Docker
+
+### URL de la imagen
 
 https://hub.docker.com/repository/docker/rediatcc/flashcard-backend
+
+### Crear e iniciar contenedor de docker
+
+1. Entra a la raiz de la carpeta desde la consola de comandos y escibres el siguiente comando `docker compose up` y esperas a que termine
+2. En el navagador o postman escribes: `localhost:4400/api/` o acompañado de algunos de los endpoints referenciados mas abajo.
 
 ## Instalar dependencias
 
