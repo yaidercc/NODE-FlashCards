@@ -12,6 +12,10 @@ La API de este proyecto de flashcards te permite crear una cuenta, autenticarte,
 
 ## Endpoints
 
+### Documentacion con swagger
+
+- `POST` `/api/` - Docs
+
 ### Autenticación
 
 - `POST` `/api/auth/login` - Iniciar sesión
