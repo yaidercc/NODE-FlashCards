@@ -10,11 +10,11 @@ La API de este proyecto de flashcards te permite crear una cuenta, autenticarte,
 
 `npm run dev`
 
+## Documentacion con swagger
+
+Para la documentacion debes entrar a la siguiente url en el navegador  `http://localhost:{puerto}/api/`
+
 ## Endpoints
-
-### Documentacion con swagger
-
-- `POST` `/api/` - Docs
 
 ### Autenticación
 
