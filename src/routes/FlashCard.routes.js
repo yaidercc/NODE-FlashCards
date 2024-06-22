@@ -12,6 +12,13 @@ const validateFields = require("../helpers/validarCampos");
  *     description: Obtener una flashcard especifico
  *     tags:
  *       - Flashcards
+ *     parameters:
+ *       - name: topic
+ *         in: path
+ *         required: true
+ *         description: Id de la flashcard a obtener
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
  *          description: 
@@ -64,8 +71,10 @@ router.get("/getFlashcard/:id",isAuthenticated, flashcardControllers.getFlashCar
  *     tags:
  *       - Flashcards
  *     parameters:
- *       - in: query
- *         name: topic
+ *       - name: topic
+ *         in: path
+ *         required: true
+ *         description: Id del temario del cual se van a obtener las flashcards
  *         schema:
  *           type: string
  *     responses:

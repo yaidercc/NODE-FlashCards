@@ -1,6 +1,8 @@
 const userControllers = {};
 module.exports = userControllers;
 const User = require("../models/User");
+const cloudinary = require("cloudinary").v2;
+cloudinary.config(process.env.CLOUDINARY_URL);
 
 userControllers.getUser = async (req, res) => {
   try {
@@ -10,6 +12,7 @@ userControllers.getUser = async (req, res) => {
     if (id !== user.toString()) {
       return res.status(400).json({
         success: false,
+        code: 400,
         msg: "No autorizado.",
       });
     }
@@ -23,23 +26,26 @@ userControllers.getUser = async (req, res) => {
       user: otherInfo,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
-      error,
+      code: 500,
+      msg: "Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
 
 userControllers.editUser = async (req, res) => {
   try {
-    const { first_name, surname, username, mail, password = "", google = "", ...otherInfo } = req.body;
+    const { name, surname, username, mail, password = "", google = "", ...otherInfo } = req.body;
     const { _id: user } = req.user;
     const { id } = req.params;
 
     if (id !== user.toString()) {
       return res.status(400).json({
         success: false,
-        msg: "No autorizado.",
+        code: 400,
+        msg: "No estas autorizado para realizar esta accion.",
       });
     }
 
@@ -50,6 +56,7 @@ userControllers.editUser = async (req, res) => {
       if (findByUsername) {
         return res.status(400).json({
           success: false,
+          code: 400,
           msg: "El nombre de usuario ya esta en uso.",
         });
       }
@@ -61,6 +68,7 @@ userControllers.editUser = async (req, res) => {
       if (findByMail) {
         return res.status(400).json({
           success: false,
+          code: 400,
           msg: "El correo ya esta en uso.",
         });
       }
@@ -69,7 +77,7 @@ userControllers.editUser = async (req, res) => {
     const { second_surname = null, second_name = null, profile_img = null } = otherInfo;
 
     const isEmpty = [
-      !first_name.trim(),
+      !name.trim(),
       !surname.trim(),
       !username.trim(),
       !mail.trim(),
@@ -81,12 +89,13 @@ userControllers.editUser = async (req, res) => {
     if (isEmpty.some((field) => field)) {
       return res.status(400).json({
         success: false,
+        code: 400,
         msg: "Algunos de los campos estan vacios o son incorrectos.",
       });
     }
 
     await User.findByIdAndUpdate(id, {
-      first_name,
+      name,
       surname,
       username,
       mail,
@@ -98,9 +107,11 @@ userControllers.editUser = async (req, res) => {
       msg: "Usuario editado con exito.",
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
-      error,
+      code: 500,
+      msg: "Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
@@ -113,6 +124,7 @@ userControllers.deleteUser = async (req, res) => {
     if (id !== user.toString()) {
       return res.status(400).json({
         success: false,
+        code: 400,
         msg: "No autorizado.",
       });
     }
@@ -121,17 +133,51 @@ userControllers.deleteUser = async (req, res) => {
 
     req.logout((err) => {
       if (err) {
-        return res.status(500).json({ message: "Error al cerrar sesión" });
+        return res.status(500).json({ success: false, code: 500, msg: "Error al cerrar sesión" });
       }
       return res.json({
         success: true,
-        msg: "Usuario eliminado con exito."
+        msg: "Usuario eliminado con exito.",
       });
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
-      error,
+      code: 500,
+      msg: "Error en el servidor. Por favor, intenta de nuevo más tarde",
+    });
+  }
+};
+
+userControllers.uploadImage = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const user = await User.findById(_id)
+
+    if (user.profile_img) {
+      const nombreArr = user.profile_img.split("/");
+      const nombre = nombreArr[nombreArr.length - 1];
+      const [public_id] = nombre.split(".");
+      cloudinary.uploader.destroy(public_id);
+    }
+    const { tempFilePath } = req.files.file;
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+    user.profile_img = secure_url;
+
+    await user.save();
+
+    return res.json({
+      success: true,
+      profile_img: secure_url,
+      msg: "Imagen de perfil cambiada con exito."
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      code: 500,
+      msg: "Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };

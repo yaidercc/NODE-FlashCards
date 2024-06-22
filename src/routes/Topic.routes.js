@@ -3,12 +3,58 @@ const { check } = require("express-validator");
 const topicControllers = require("../controllers/Topic.controller");
 const validateFields = require("../helpers/validarCampos");
 const isAuthenticated = require("../middlewares/isAuthenticated");
+/**
+ * @openapi
+ * /api/topic/getTopics:
+ *   get:
+ *     summary: Obtener temarios
+ *     description: Obtener todos los temarios de un usuario
+ *     tags:
+ *        - Temarios
+ *     responses:
+ *      200:
+ *         description: 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la peticion
+ *                 topics:
+ *                   type: object
+ *                   description: Temarios consultados
+ *      500:
+ *         description: 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la peticion
+ *                 error:
+ *                   type: object
+ *                   description: Errores del servidor
+ * 
+ */
+router.get("/getTopics", isAuthenticated, topicControllers.getTopics);
+
 
 /**
  * @openapi
  * /api/topic/{id}:
  *   get:
  *     summary: Obtener temario
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Id del temario a obtener
+ *         schema:
+ *           type: string
  *     description: Obtener un temario en especifico
  *     tags:
  *       - Temarios
@@ -63,44 +109,6 @@ router.get(
   topicControllers.getTopic
 );
 
-/**
- * @openapi
- * /api/topic/getTopics:
- *   get:
- *     summary: Obtener temarios
- *     description: Obtener todos los temarios de un usuario
- *     tags:
- *        - Temarios
- *     responses:
- *      200:
- *         description: 
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   description: Estado de la peticion
- *                 topics:
- *                   type: object
- *                   description: Temarios consultados
- *      500:
- *         description: 
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   description: Estado de la peticion
- *                 error:
- *                   type: object
- *                   description: Errores del servidor
- * 
- */
-router.get("/getTopics", isAuthenticated, topicControllers.getTopics);
 
 /**
  * @openapi
@@ -169,6 +177,13 @@ router.post(
  * /api/topic/editTopic/{id}:
  *   put:
  *     summary: Editar temario
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Id del temario a editar
+ *         schema:
+ *           type: string
  *     description: Edita un temario especifico
  *     tags:
  *       - Temarios
@@ -230,6 +245,13 @@ router.put(
  * /api/topic/deleteTopic/{id}:
  *   delete:
  *     summary: Eliminar temario
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Id del temario a eliminar
+ *         schema:
+ *           type: string
  *     description: Eliminar un temario especifico
  *     tags:
  *       - Temarios

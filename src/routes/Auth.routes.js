@@ -3,8 +3,7 @@ const { check } = require("express-validator");
 const validateFields = require("../helpers/validarCampos");
 const authControllers = require("../controllers/Auth.controller");
 const isAuthenticated = require("../middlewares/isAuthenticated");
-const path = require("path");
-
+const validateJWT = require("../helpers/validateJWT");
 
 /**
  * @openapi
@@ -77,7 +76,7 @@ router.post(
  *     description: Registro de usuarios
  *     tags:
  *       - Auth
- *     produces: 
+ *     produces:
  *        - application/json
  *     requestBody:
  *       required: true
@@ -86,7 +85,7 @@ router.post(
  *           schema:
  *             type: object
  *             properties:
- *                first_name:
+ *                name:
  *                   required: true
  *                   type: string
  *                   description: El correo electrónico del usuario
@@ -128,16 +127,16 @@ router.post(
  *                   example: "juan123"
  */
 router.post(
-  "/singin",
+  "/singup",
   [
-    check("first_name", "El nombre es obligatorio").not().isEmpty(),
-    check("surname", "El nombre es obligatorio").not().isEmpty(),
+    check("name", "El nombre es obligatorio").not().isEmpty(),
+    check("surname", "El apellido es obligatorio").not().isEmpty(),
     check("username", "El nombre de usuario es obligatorio").not().isEmpty(),
     check("mail", "El correo es obligatorio").not().isEmpty(),
-    check("password", "La clave es obligatoria").not().isEmpty(),
+    check("password", "La clave es obligatoria").isStrongPassword(),
     validateFields,
   ],
-  authControllers.signin
+  authControllers.singup
 );
 
 /**
@@ -146,7 +145,42 @@ router.post(
  *   get:
  *     summary: Cerrar sesion de un usuario
  *     description: Cierra la sesión del usuario
- *     tags: 
+ *     tags:
+ *       - Auth
+ *     responses:
+ *       200:
+ *         description: Correo enviado con exito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la respuesta
+ *                 msg:
+ *                   type: string
+ *                   description: Mensaje de la peticion
+ *       500:
+ *         description: Error al enviar el correo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 msg:
+ *                   type: string
+ *                   description: Mensaje de error
+ */
+router.get("/logout", authControllers.logout);
+
+/**
+ * @openapi
+ * /api/auth/sendEmailToResetPassword:
+ *   get:
+ *     summary: Envia correo al usuario para cambio de clave
+ *     description: Envia la url al usuario para que este pueda cambiar su clave
+ *     tags:
  *       - Auth
  *     responses:
  *       200:
@@ -162,6 +196,19 @@ router.post(
  *                 msg:
  *                   type: string
  *                   description: Mensaje de la peticion
+ *       400:
+ *         description: El usuario no existe o Correo no enviado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la respuesta
+ *                 msg:
+ *                   type: string
+ *                   description: Errores de la peticion
  *       500:
  *         description: Error al cerrar sesion
  *         content:
@@ -173,10 +220,105 @@ router.post(
  *                   type: string
  *                   description: Mensaje de error
  */
-router.get("/logout", authControllers.logout);
+router.post(
+  "/sendEmailToResetPassword",
+  [check("mail", "El correo es incorrecto o esta vacio"), validateFields],
+  authControllers.sendEmailToResetPassword
+);
 
-router.get("/hola", isAuthenticated, (req, res, next) => {
-  res.sendFile(path.join(__dirname, "../public", "index.html"));
+/**
+ * @openapi
+ * /api/auth/resetPassword:
+ *   get:
+ *     summary: Cambiar la contraseña de un usuario
+ *     description: Cambiar la contraseña de un usuario por una nueva
+ *     tags:
+ *       - Auth
+ *     responses:
+ *       200:
+ *         description: Contraeña cambiada con exito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la respuesta
+ *                 msg:
+ *                   type: string
+ *                   description: Mensaje de la peticion
+ *       400:
+ *         description: La clave esta vacia o Hubo un error al actualizar la clave
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la respuesta
+ *                 msg:
+ *                   type: string
+ *                   description: Errores de la petici
+ *       500:
+ *         description: Error al cambiar la contraseña
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 msg:
+ *                   type: string
+ *                   description: Mensaje de error
+ */
+router.post("/resetPassword", validateJWT, authControllers.resetPassword);
+
+
+/**
+ * @openapi
+ * /api/auth/validateToken:
+ *   get:
+ *     summary: Validar token jwt
+ *     description: Validar si el token para cambiar la contraseña aun esta vigente
+ *     tags:
+ *       - Auth
+ *     responses:
+ *       200:
+ *         description: Token vigente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la respuesta
+ *       401:
+ *         description: Token no valido o el usuario no existe
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Estado de la respuesta
+ *                 msg:
+ *                   type: string
+ *                   description: Errores de la peticion
+ */
+router.get("/validateToken", validateJWT, (req, res) => {
+  return res.json({
+    success: true,
+  });
+});
+
+router.get("/isAuthenticated", isAuthenticated, (req, res) => {
+  return res.json({
+    success: true,
+    user: req.user,
+  });
 });
 
 module.exports = router;

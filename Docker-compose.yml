@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  db:
+    image: mongo:6.0
+    container_name: flashcardBd
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    volumes:
+      - flashcards_data:/data/db
+    restart: always
+  
+  flashcards_backend:
+
+    depends_on:
+      - db
+    image: rediatcc/flashcards-backend:1.0.0
+    container_name: flashcards_backend
+    ports:
+      - "4400:${PORT}"
+    environment:
+      - MONGO_CNN=${MONGO_CNN}
+      - MONGO_CNN_SESSION=${MONGO_CNN_SESSION}
+      - JWTKEY=${JWTKEY}
+      - SECRET=${SECRET}
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - EMAILOWNER=${EMAILOWNER}
+      - PASSWORDOWNER=${PASSWORDOWNER}
+    restart: always
+
+volumes:
+  flashcards_data:

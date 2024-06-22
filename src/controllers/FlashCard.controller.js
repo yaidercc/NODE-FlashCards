@@ -12,8 +12,9 @@ flashcardController.getFlashCard = async (req, res) => {
     const getFlashcard = await FlashCard.findById(id);
 
     if (!getFlashcard) {
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
+        code: 404,
         msg: "La flashcard no existe.",
       });
     }
@@ -29,9 +30,11 @@ flashcardController.getFlashCard = async (req, res) => {
       flashcard: getFlashcard,
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       success: false,
-      error,
+      code: 500,
+      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
@@ -54,9 +57,11 @@ flashcardController.getFlashCards = async (req, res) => {
       flashcard: getFlashcards,
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       success: false,
-      error,
+      code: 500,
+      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
@@ -76,6 +81,7 @@ flashcardController.createFlashCard = async (req, res) => {
     if(!question.trim() || !answer.trim()){
       return res.status(400).json({
         success: false,
+        code: 400,
         masg: "Alguno de los datos es incorrecto o esta vacio."
       })
     }
@@ -95,9 +101,11 @@ flashcardController.createFlashCard = async (req, res) => {
       flashcard,
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       success: false,
-      error,
+      code: 500,
+      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
@@ -117,6 +125,7 @@ flashcardController.editFlashcard = async (req, res) => {
     if(!question.trim() || !answer.trim()){
       return res.status(400).json({
         success: false,
+        code: 400,
         masg: "Alguno de los datos es incorrecto o esta vacio."
       })
     }
@@ -128,9 +137,11 @@ flashcardController.editFlashcard = async (req, res) => {
       msg: "Flashcard editada con exito."
     })
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       success: false,
-      error,
+      code: 500,
+      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
@@ -145,7 +156,6 @@ flashcardController.deleteFlashcard = async (req, res) => {
     if (!topicValidation.success) {
       return res.status(400).json(topicValidation);
     }
-
     await FlashCard.findByIdAndDelete(id);
 
     return res.json({
@@ -153,9 +163,11 @@ flashcardController.deleteFlashcard = async (req, res) => {
       msg: "Flashcard eliminada con exito."
     })
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       success: false,
-      error,
+      code: 500,
+      msg:"Error en el servidor. Por favor, intenta de nuevo más tarde",
     });
   }
 };
