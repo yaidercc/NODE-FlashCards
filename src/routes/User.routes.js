@@ -9,14 +9,16 @@ const isAuthenticated = require("../middlewares/isAuthenticated");
  * /api/user/getUser/{id}:
  *   get:
  *     summary: Obtener usuario
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Id del usuario a obtener
+ *         schema:
+ *           type: string
  *     description: Obtener los datos de un usuario
  *     tags:
  *       - Usuarios
- *     parameters:
- *       - in: query
- *         name: id
- *         schema:
- *           type: string
  *     responses:
  *       200:
  *          description: 
@@ -63,19 +65,17 @@ router.get("/getUser/:id", isAuthenticated, userControllers.getUser)
 
 /**
  * @openapi
- * /api/flashcard/editUser/{id}:
+ * /api/user/editUser/{id}:
  *   put:
  *     summary: Editar usuario
  *     description: Editar un usuario especifico
  *     tags:
  *       - Usuarios
  *     parameters:
- *       - in: query
- *         name: topic
- *         schema:
- *           type: string
- *       - in: query
- *         name: id
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Id del usuario a editar
  *         schema:
  *           type: string
  *     responses:
@@ -133,19 +133,17 @@ router.put("/editUser/:id", [
 
 /**
  * @openapi
- * /api/flashcard/deleteUser/{id}:
+ * /api/user/deleteUser/{id}:
  *   delete:
  *     summary: Eliminar usuario
  *     description: Eliminar un usuario especifico
  *     tags:
  *       - Usuarios
  *     parameters:
- *       - in: query
- *         name: topic
- *         schema:
- *           type: string
- *       - in: query
- *         name: id
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Id del usuario a eliminar
  *         schema:
  *           type: string
  *     responses:
@@ -195,6 +193,43 @@ router.delete("/deleteUser/:id", [
     validateFields,
 ], userControllers.deleteUser)
 
+
+/**
+ * @openapi
+ * /api/user/deleteUser/{id}:
+ *   delete:
+ *     summary: Cambiar foto de perfil
+ *     description: Cambiar la foto de perfil de un usuario
+ *     tags:
+ *       - Usuarios
+ *     responses:
+ *       200:
+ *          description: 
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: Estado de la peticion
+ *                  msg:
+ *                    type: string
+ *                    description: Mensaje de la peticion
+ *       500:
+ *          description: 
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    description: Estado de la peticion
+ *                  msg:
+ *                    type: string
+ *                    description: Errores del servidor
+ */
 router.put("/changeProfile",userControllers.uploadImage)
 
 module.exports = router;

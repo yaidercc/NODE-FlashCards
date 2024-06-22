@@ -29,10 +29,26 @@ class Server {
   }
 
   middlewares() {
-    const origincors= 
-      process.env.NODE_ENV === 'production' 
-      ? 'https://flashcards-tau-six.vercel.app'
-      : 'http://localhost:5173';
+    const origincors = process.env.NODE_ENV === "production" ? "https://flashcards-tau-six.vercel.app" : "http://localhost:5173";
+
+    const passportConfig = {
+      secret: process.env.SECRET,
+      resave: false,
+      saveUninitialized: false,
+      store: MongoStore.create({
+        mongoUrl: process.env.MONGO_CNN_SESSION,
+      }),
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 12,
+        secure: false,
+        httpOnly: true,
+      },
+    };
+
+    if (process.env.NODE_ENV === "production") {
+      passportConfig["cookie"] = { ...passportConfig["cookie"], secure: true, sameSite: "none" };
+      passportConfig["proxy"] = true;
+    }
 
     this.app.use(
       cors({
@@ -43,21 +59,7 @@ class Server {
     this.app.use(express.json());
 
     this.app.use(
-      session({
-        secret: process.env.SECRET,
-        resave: false,
-        saveUninitialized: false,
-        store: MongoStore.create({
-          mongoUrl: process.env.MONGO_CNN_SESSION,
-        }),
-        cookie: {
-          maxAge: 1000 * 60 * 60 * 12,
-          secure: true, 
-          httpOnly: true,
-          sameSite: "none",
-        },
-        proxy: true, 
-      })
+      session(passportConfig)
     );
 
     this.app.use(passport.initialize());

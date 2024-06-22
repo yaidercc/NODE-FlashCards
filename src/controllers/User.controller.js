@@ -169,7 +169,8 @@ userControllers.uploadImage = async (req, res) => {
 
     return res.json({
       success: true,
-      profile_img: secure_url
+      profile_img: secure_url,
+      msg: "Imagen de perfil cambiada con exito."
     });
   } catch (error) {
     console.log(error);

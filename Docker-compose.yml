@@ -30,7 +30,6 @@ services:
       - MONGO_PASSWORD=${MONGO_PASSWORD}
       - EMAILOWNER=${EMAILOWNER}
       - PASSWORDOWNER=${PASSWORDOWNER}
-      - ORIGINCORS=${ORIGINCORS}
     restart: always
 
 volumes:

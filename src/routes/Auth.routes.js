@@ -3,7 +3,6 @@ const { check } = require("express-validator");
 const validateFields = require("../helpers/validarCampos");
 const authControllers = require("../controllers/Auth.controller");
 const isAuthenticated = require("../middlewares/isAuthenticated");
-const path = require("path");
 const validateJWT = require("../helpers/validateJWT");
 
 /**
