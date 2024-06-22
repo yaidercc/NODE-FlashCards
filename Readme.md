@@ -66,4 +66,4 @@ Para la documentacion debes entrar a la siguiente url en el navegador  `http://l
 - Mongoose
 - JWT
 - Swagger
-- Passport
+- Passport.js
